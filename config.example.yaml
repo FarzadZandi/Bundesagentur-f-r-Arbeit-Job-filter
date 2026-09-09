@@ -1,0 +1,39 @@
+# Copy this file to config.yaml and replace the contact address before running.
+contact_email: "replace-with-your-email@example.com"
+keywords_path: "keywords_jobseeking_student_v1.json"
+cache_dir: "cache"
+database_path: "seen.sqlite"
+output_dir: "out"
+
+# Polite per-host network pacing.
+min_delay: 2.5
+max_delay: 6.0
+long_pause_every: 25
+long_pause_min: 15.0
+long_pause_max: 30.0
+
+# Independent pacing between advertisements, including cached pages.
+position_delay_min: 0.5
+position_delay_max: 2.0
+position_batch_size_min: 90
+position_batch_size_max: 100
+position_batch_pause_min: 45.0
+position_batch_pause_max: 60.0
+
+max_retries: 3
+request_timeout: 30.0
+
+# Zero means unlimited. A bounded advertisement count makes runs resumable.
+max_ads: 500
+max_pages: 0
+
+# Prefer the public BA JSON endpoint, with safe HTML fallback.
+arbeitsagentur_use_api: true
+
+thresholds:
+  priority: 12
+  review: 6
+
+user_agents:
+  - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+  - "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15"

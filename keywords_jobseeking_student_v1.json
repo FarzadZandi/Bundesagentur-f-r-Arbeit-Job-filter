@@ -1,0 +1,1486 @@
+{
+  "_meta": {
+    "name": "B01-B10 job filter dictionary for Farzad Zandi (DE/EN)",
+    "owner": "Farzad Zandi",
+    "version": "1.7",
+    "date": "2026-09-06",
+    "scope": "Germany. Full-time roles and non-full-time early-career roles, limited to CV families B01-B10.",
+    "normalization": "Lowercase; map ä→ae, ö→oe, ü→ue, ß→ss; collapse whitespace; strip HTML. Terms below are written mainly in normalized form.",
+    "decision_order": [
+      "employment_gate",
+      "hard_exclusion",
+      "kill_conditional",
+      "relevance_gate",
+      "cv_family classification",
+      "score",
+      "penalties and bonuses",
+      "flags",
+      "band"
+    ],
+    "scoring_rule": "Use ONLY the highest-scoring CV family as family_score so overlaps do not inflate results. Add each non-family group once when it has at least one hit, plus +1 per additional distinct hit, capped at 2x that group's base weight. title_boost is added once. Penalties/bonuses are additive.",
+    "score_bands": {
+      "PRIORITY": "final score >= 12 after all gates pass",
+      "REVIEW": "final score 6 to 11 after all gates pass",
+      "DE REQUIRED": "B01-B10 evidence passed but German C1/C2/native-level wording matched",
+      "ACADEMISCHE": "explicit doctoral or otherwise uncertain academic-research role",
+      "DROP": "a definite exclusion matched, such as a non-target employment format, excluded commercial profession, wrong profession without analytical evidence, or talking-centered marketing without research/analytics"
+    },
+    "important_rules": [
+      "Sehr gute/verhandlungssichere/native-level German and C1/C2 German route a B01-B10 match to DE Required, except consulting roles, which are dropped when they require that level of German. B2/good German remains a penalty.",
+      "Immatrikulation, Pflichtpraktikum, minimum remaining study time, visa/work-permit, EU citizenship and security-clearance wording are flags only. Do not infer legal eligibility from them.",
+      "Recall-first relevance: a strong B01-B10 family match passes by itself. A weak family match passes only when paired with an analysis task or an English-language advertisement.",
+      "Industries are not excluded. Exclusions are profession/title based and conditional so an analytics role in manufacturing, healthcare, finance or engineering can still pass.",
+      "The dictionary and relevance gate intentionally favor recall. Extra false positives are acceptable because potentially suitable positions should not be silently omitted."
+    ]
+  },
+
+  "employment_gate": {
+    "_comment": "Mandatory. Accept full-time, part-time, working-student, internship, and graduate/trainee roles. Prefer structured BA employment-type metadata; otherwise use title; body-only evidence must be a strong phrase.",
+    "required_title_terms": [
+      "werkstudent",
+      "werkstudentin",
+      "werkstudierender",
+      "werkstudierende",
+      "working student",
+      "working-student",
+      "praktikum",
+      "praktikant",
+      "praktikkant",
+      "praktikantin",
+      "praktikumsstelle",
+      "praktikumsplatz",
+      "internship",
+      "student internship",
+      "trainee",
+      "graduate program",
+      "graduate programme",
+      "graduate scheme",
+      "premaster",
+      "berufseinsteiger"
+      ,"bachelorarbeit"
+      ,"masterarbeit"
+      ,"abschlussarbeit"
+      ,"thesis"
+      ,"studentische hilfskraft"
+      ,"wissenschaftliche hilfskraft"
+      ,"student assistant"
+      ,"student research assistant"
+      ,"student employee"
+      ,"hiwi"
+    ],
+    "required_body_strong_terms": [
+      "als werkstudent",
+      "als werkstudentin",
+      "werkstudententaetigkeit",
+      "werkstudentenstelle",
+      "working student position",
+      "join us as a working student",
+      "studentische taetigkeit als werkstudent",
+      "im rahmen eines praktikums",
+      "fuer ein praktikum",
+      "praktikumsstelle",
+      "praktikumsplatz",
+      "internship position",
+      "internship opportunity",
+      "join us as an intern",
+      "graduate program",
+      "graduate programme",
+      "graduate scheme",
+      "trainee program",
+      "traineeprogramm"
+    ],
+    "structured_types_allowed": [
+      "werkstudent",
+      "working student",
+      "praktikum",
+      "internship",
+      "trainee",
+      "graduate program",
+      "graduate programme",
+      "vollzeit",
+      "full time",
+      "full-time",
+      "teilzeit",
+      "part time",
+      "part-time",
+      "befristete beschaeftigung"
+    ],
+    "structured_types_not_target": [
+      "ausbildung",
+      "duales studium",
+      "minijob",
+      "aushilfe",
+      "freiberuflich"
+    ],
+    "format_flag_terms": [
+      "werkstudent",
+      "working student",
+      "praktikum",
+      "internship",
+      "trainee",
+      "graduate program",
+      "graduate programme",
+      "vollzeit",
+      "full time",
+      "full-time",
+      "teilzeit",
+      "part time",
+      "part-time"
+    ],
+    "rule": "PASS if structured BA employment type is allowed OR title matches required_title_terms/regex. If only the body matches, require a required_body_strong_term. Otherwise DROP with reason employment_format_not_target. Student, internship, and graduate/trainee title evidence takes precedence over generic structured full-time metadata for output routing."
+  },
+
+  "hard_exclusion": {
+    "_comment": "Hard exclusions requested for this search. German high-level phrases match title/body; commercial roles match title only so research/analytics references in a body do not create false kills.",
+    "language_de_high": {
+      "reason": "german_c1_c2_or_native_required",
+      "terms": [
+        "sehr gute deutschkenntnisse",
+        "sehr gutes deutsch",
+        "sehr gute kenntnisse der deutschen sprache",
+        "verhandlungssichere deutschkenntnisse",
+        "verhandlungssicheres deutsch",
+        "deutsch auf muttersprachniveau",
+        "muttersprachliche deutschkenntnisse",
+        "deutschkenntnisse c1",
+        "deutschkenntnisse c2",
+        "deutsch c1",
+        "deutsch c2",
+        "fliessende deutschkenntnisse",
+        "fliessendes deutsch",
+        "fliessend deutsch",
+        "exzellente deutschkenntnisse",
+        "hervorragende deutschkenntnisse",
+        "hervorragendes deutsch",
+        "sehr gut auf deutsch",
+        "fluent in german",
+        "fluency in german",
+        "german fluency",
+        "business fluent german",
+        "business fluent in german",
+        "native-level german",
+        "near-native german",
+        "professional proficiency in german",
+        "full professional proficiency in german",
+        "excellent command of german",
+        "fluent german",
+        "native german",
+        "german c1",
+        "german c2"
+      ]
+    },
+    "commercial_title_roles": {
+      "reason": "excluded_einkauf_seller_or_sales_role",
+      "terms": [
+        "einkauf",
+        "einkaeufer",
+        "strategischer einkaeufer",
+        "operativer einkaeufer",
+        "buyer",
+        "purchasing",
+        "procurement",
+        "verkaeufer",
+        "verkaeuferin",
+        "seller",
+        "sales representative",
+        "sales manager",
+        "sales manger",
+        "sales assistant",
+        "sales development representative",
+        "vertriebsmitarbeiter",
+        "vertrieb",
+        "aussendienst",
+        "beschaffung",
+        "account manager",
+        "key account manager",
+        "outbound kampagnenmanagement",
+        "account executive",
+        "telefonvertrieb"
+      ]
+    },
+    "german_consulting_title_roles": {
+      "reason": "german_c1_c2_or_native_required_for_consulting",
+      "terms": [
+        "consultant",
+        "consulting",
+        "berater",
+        "beraterin",
+        "beratung"
+      ]
+    },
+    "academic_title_roles": {
+      "reason": "excluded_doctoral_candidate_role",
+      "terms": [
+        "doktorand",
+        "doktorandin",
+        "doctoral candidate",
+        "doctoral researcher",
+        "phd candidate",
+        "phd student",
+        "promotionsstelle"
+      ]
+    }
+  },
+
+  "marketing_talking_exclusion": {
+    "_comment": "Marketing jobs centered on outreach/talking are excluded. Research or analytics marketing jobs are rescued when they contain B07/B09 strong evidence plus an analytical task.",
+    "title_terms": [
+      "marketing",
+      "kampagnenmanagement",
+      "campaign management",
+      "kommunikation",
+      "communications",
+      "public relations",
+      "social media"
+    ],
+    "talking_terms": [
+      "kundenkontakt",
+      "kundengespraeche",
+      "telefonieren",
+      "telefonische ansprache",
+      "ansprache von kunden",
+      "beratung von kunden",
+      "customer contact",
+      "client contact",
+      "speak with customers",
+      "talk to customers",
+      "outreach",
+      "akquise",
+      "messebetreuung",
+      "eventbetreuung",
+      "community management"
+      ,"event management"
+      ,"eventmanagement"
+      ,"events"
+      ,"veranstaltungsbetreuung"
+    ],
+    "reason": "marketing_talking_without_research_or_analytics"
+  },
+
+  "relevance_gate": {
+    "_comment": "Recall-first gate: retain potentially relevant work for manual review, accepting extra false positives to avoid false negatives.",
+    "rule": "PASS if at least one strong B01-B10 family term matches, OR if a weak family term is paired with an analysis_task or an English-language advertisement.",
+    "drop_reason": "no_family_evidence_or_weak_family_without_analysis_or_english"
+  },
+
+  "cv_families": {
+    "B01_forschung_unternehmen_institute": {
+      "label": "B01 Forschung in Unternehmen und Instituten",
+      "weight": 6,
+      "strong_terms": [
+        "research analyst",
+        "research intern",
+        "research internship",
+        "research working student",
+        "forschungspraktikum",
+        "forschungsprojekt",
+        "angewandte forschung",
+        "applied research",
+        "empirical research",
+        "empirische forschung",
+        "evaluation research",
+        "survey research",
+        "user research",
+        "research center",
+        "research centre",
+        "forschungsinstitut",
+        "forschungszentrum",
+        "institutsforschung",
+        "corporate research",
+        "business research"
+        ,"social research"
+        ,"cross-cultural survey methods"
+        ,"questionnaire design"
+        ,"questionnaire evaluation"
+        ,"survey methodology"
+        ,"literature review"
+        ,"mitarbeiterbefragung"
+      ],
+      "weak_terms": [
+        "research",
+        "forschung",
+        "studie",
+        "study",
+        "evaluation",
+        "befragung",
+        "survey",
+        "empirisch",
+        "evidence"
+      ]
+    },
+
+    "B02_strategie_unternehmensentwicklung": {
+      "label": "B02 Strategie, Unternehmensentwicklung und Business Development",
+      "weight": 6,
+      "strong_terms": [
+        "business development",
+        "unternehmensentwicklung",
+        "corporate development",
+        "strategy analyst",
+        "strategy intern",
+        "strategy internship",
+        "strategic projects",
+        "strategische projekte",
+        "strategisches management",
+        "strategic management",
+        "business strategy",
+        "commercial strategy",
+        "commercial excellence",
+        "market entry",
+        "markteintritt",
+        "business planning",
+        "growth strategy",
+        "growth projects",
+        "business operations",
+        "strategic finance",
+        "corporate strategy",
+        "people strategy",
+        "hr strategy",
+        "workforce planning",
+        "organisationsentwicklung",
+        "organizational development"
+        ,"talent analytics"
+        ,"hr analytics"
+        ,"workforce analytics"
+        ,"hr reporting"
+        ,"personalcontrolling"
+        ,"hr controlling"
+        ,"personalentwicklung"
+        ,"strategische personalentwicklung"
+      ],
+      "weak_terms": [
+        "strategie",
+        "strategy",
+        "talent management",
+        "growth",
+        "business case",
+        "geschaeftsmodell",
+        "business model",
+        "portfolio",
+        "kpi",
+        "benchmarking",
+        "wettbewerbsanalyse"
+      ]
+    },
+
+    "B03_inkubation_gruenderzentren_transfer": {
+      "label": "B03 Inkubation, Gründerzentren und Technologietransfer",
+      "weight": 6,
+      "strong_terms": [
+        "gruendungsberatung",
+        "gruendungsfoerderung",
+        "gruenderzentrum",
+        "gruenderzentrum",
+        "gruendungszentrum",
+        "inkubationszentrum",
+        "inkubator",
+        "incubator",
+        "accelerator",
+        "startup center",
+        "startup centre",
+        "entrepreneurship center",
+        "entrepreneurship centre",
+        "startup ecosystem",
+        "startup-ecosystem",
+        "innovation ecosystem",
+        "innovationszentrum",
+        "technology transfer",
+        "technologietransfer",
+        "transfermanagement",
+        "transferstelle",
+        "startup support",
+        "founder support",
+        "gruenderservice",
+        "entrepreneurship program",
+        "entrepreneurship programme"
+      ],
+      "weak_terms": [
+        "gruendung",
+        "gruender",
+        "entrepreneurship",
+        "entrepreneurial",
+        "innovation",
+        "transfer",
+        "ecosystem",
+        "community",
+        "startup events",
+        "founder"
+      ]
+    },
+
+    "B04_startups_ventures_kommerzialisierung": {
+      "label": "B04 Startups, Ventures und Kommerzialisierung",
+      "weight": 6,
+      "strong_terms": [
+        "venture analyst",
+        "venture capital",
+        "corporate venture",
+        "corporate venturing",
+        "venture development",
+        "venture building",
+        "venture builder",
+        "startup scout",
+        "startup scouting",
+        "deal flow",
+        "dealflow",
+        "investment analyst",
+        "investment team",
+        "due diligence",
+        "commercial due diligence",
+        "commercialization",
+        "commercialisation",
+        "kommerzialisierung",
+        "technology commercialization",
+        "startup portfolio",
+        "venture portfolio",
+        "startup investment",
+        "startup investments",
+        "business model evaluation",
+        "startup evaluation"
+      ],
+      "weak_terms": [
+        "startup",
+        "start-up",
+        "scale-up",
+        "scaleup",
+        "venture",
+        "investment",
+        "investor",
+        "pitch",
+        "sourcing",
+        "fundraising",
+        "business model",
+        "geschaeftsmodell"
+      ]
+    },
+
+    "B05_prognose_planung": {
+      "label": "B05 Prognose und Planung",
+      "weight": 6,
+      "strong_terms": [
+        "forecasting",
+        "forecast analyst",
+        "demand planning",
+        "demand planner",
+        "demand forecasting",
+        "sales forecasting",
+        "absatzplanung",
+        "absatzprognose",
+        "bedarfsplanung",
+        "supply planning",
+        "inventory planning",
+        "bestandsplanung",
+        "capacity planning",
+        "kapazitaetsplanung",
+        "sales and operations planning",
+        "s&op",
+        "revenue management",
+        "predictive planning",
+        "time series forecasting",
+        "zeitreihenanalyse"
+      ],
+      "weak_terms": [
+        "forecast",
+        "prognose",
+        "planung",
+        "planning",
+        "demand",
+        "inventory",
+        "bestand",
+        "capacity",
+        "supply chain",
+        "sales planning",
+        "scenario planning"
+      ]
+    },
+
+    "B06_data_analytics_bi": {
+      "label": "B06 Data Analytics und Business Intelligence",
+      "weight": 6,
+      "strong_terms": [
+        "data analyst",
+        "datenanalyst",
+        "data analytics",
+        "business analytics",
+        "business intelligence",
+        "bi analyst",
+        "business intelligence analyst",
+        "reporting analyst",
+        "analytics analyst",
+        "insights analyst",
+        "data science",
+        "data scientist",
+        "analytics engineer",
+        "ai engineering",
+        "data engineer",
+        "business intelligence developer",
+        "business analysis",
+        "power bi",
+        "dashboarding",
+        "management reporting",
+        "decision support",
+        "data-driven decision",
+        "commercial analytics",
+        "operations analytics",
+        "supply chain analytics",
+        "financial analytics",
+        "finance analytics",
+        "risk analytics",
+        "people analytics",
+        "sales analytics",
+        "pricing analytics",
+        "revenue analytics",
+        "revenue recognition"
+        ,"controlling"
+        ,"financial controlling"
+        ,"finance controlling"
+        ,"financial planning and analysis"
+        ,"fp&a"
+        ,"management accounting"
+        ,"risikomanagement"
+        ,"risk management"
+        ,"risikoanalyse"
+        ,"root cause analysis"
+        ,"ursachenanalyse"
+        ,"qualitaetsdatenanalyse"
+        ,"business controlling"
+        ,"project controlling"
+        ,"root cause analysis"
+        ,"ursachenanalyse"
+        ,"qualitaetsdatenanalyse"
+      ],
+      "weak_terms": [
+        "analytics",
+        "analyse",
+        "analysis",
+        "datenanalyse",
+        "data",
+        "reporting",
+        "dashboard",
+        "kpi",
+        "insights",
+        "business analyst",
+        "business analysis",
+        "data quality",
+        "data management",
+        "datenmanagement",
+        "data visualization",
+        "datenvisualisierung",
+        "datenqualitaetskennzahlen",
+        "data quality metrics",
+        "datenstrukturen",
+        "data structures"
+      ]
+    },
+
+    "B07_market_intelligence_marktforschung": {
+      "label": "B07 Market Intelligence und Marktforschung",
+      "weight": 6,
+      "strong_terms": [
+        "market intelligence",
+        "competitive intelligence",
+        "market research",
+        "marktforschung",
+        "marktanalyse",
+        "market analyst",
+        "consumer insights",
+        "customer insights",
+        "commercial insights",
+        "market insights",
+        "competitor analysis",
+        "wettbewerbsanalyse",
+        "marktbeobachtung",
+        "market monitoring",
+        "pricing analysis",
+        "preisstrategie",
+        "market sizing",
+        "marktpotenzial",
+        "market entry analysis"
+      ],
+      "weak_terms": [
+        "market",
+        "markt",
+        "wettbewerb",
+        "competitor",
+        "consumer",
+        "kunde",
+        "customer",
+        "pricing",
+        "preis",
+        "segmentierung",
+        "segmentation",
+        "insights"
+      ]
+    },
+
+    "B08_consulting_analytics_consulting": {
+      "label": "B08 Consulting und Analytics Consulting",
+      "weight": 6,
+      "strong_terms": [
+        "analytics consulting",
+        "data consulting",
+        "business consulting",
+        "strategy consulting",
+        "management consulting",
+        "inhouse consulting",
+        "in-house consulting",
+        "transformation consulting",
+        "digital consulting",
+        "advisory analytics",
+        "consulting intern",
+        "consulting internship",
+        "consulting working student",
+        "werkstudent consulting",
+        "praktikum consulting",
+        "unternehmensberatung",
+        "sap consultant",
+        "sap consulting",
+        "sap berater",
+        "sap beraterin",
+        "erp consultant",
+        "erp consulting",
+        "erp-berater",
+        "crm consultant",
+        "crm consulting",
+        "salesforce consultant",
+        "salesforce consulting"
+      ],
+      "weak_terms": [
+        "consulting",
+        "consultant",
+        "beratung",
+        "berater",
+        "advisory",
+        "client project",
+        "kundenprojekt",
+        "workshop",
+        "stakeholder"
+      ]
+    },
+
+    "B09_digital_analytics_web_analyse": {
+      "label": "B09 Digital Analytics und Web-Analyse",
+      "weight": 6,
+      "strong_terms": [
+        "digital analytics",
+        "web analytics",
+        "webanalyse",
+        "product analytics",
+        "marketing analytics",
+        "growth analytics",
+        "e-commerce analytics",
+        "ecommerce analytics",
+        "customer analytics",
+        "crm analytics",
+        "campaign analytics",
+        "performance analytics",
+        "conversion optimization",
+        "conversion optimisation",
+        "conversion rate optimization",
+        "conversion rate optimisation",
+        "funnel analysis",
+        "attribution analysis",
+        "google analytics",
+        "ga4",
+        "adobe analytics",
+        "digital performance"
+      ],
+      "weak_terms": [
+        "performance marketing",
+        "digital marketing",
+        "e-commerce",
+        "ecommerce",
+        "funnel",
+        "conversion",
+        "attribution",
+        "campaign",
+        "crm",
+        "traffic",
+        "webtracking",
+        "tracking",
+        "seo",
+        "sem"
+      ]
+    },
+
+    "B10_digitale_transformation_digitalstrategie": {
+      "label": "B10 Digitale Transformation und Digitalstrategie",
+      "weight": 6,
+      "strong_terms": [
+        "digital transformation",
+        "digitale transformation",
+        "digital strategy",
+        "digitalstrategie",
+        "digitalization strategy",
+        "digitalisation strategy",
+        "digitalisierungsstrategie",
+        "prozessdigitalisierung",
+        "process digitalization",
+        "process digitization",
+        "business process transformation",
+        "business process management",
+        "geschaeftsprozesse",
+        "product implementation",
+        "business applica",
+        "digital innovation",
+        "digitale innovation",
+        "transformation office",
+        "digital transformation office",
+        "ai transformation",
+        "ki-transformation",
+        "technology strategy",
+        "technologiestrategie",
+        "process mining"
+        ,"prozessmanagement"
+        ,"process management"
+        ,"lean management"
+        ,"operational excellence"
+        ,"opx"
+        ,"continuous improvement"
+        ,"kontinuierliche verbesserung"
+        ,"process automation"
+        ,"prozessautomatisierung"
+        ,"automatisierung von prozessen"
+        ,"digital supply chain"
+        ,"digitales supply chain management"
+      ],
+      "weak_terms": [
+        "digitalisierung",
+        "digitalization",
+        "digitalisation",
+        "transformation",
+        "automatisierung",
+        "automation",
+        "prozessoptimierung",
+        "process improvement",
+        "innovation management",
+        "innovationsmanagement",
+        "digital project"
+      ]
+    }
+  },
+
+  "analysis_task": {
+    "_comment": "Task-level analytical evidence. These terms allow generic titles such as 'Werkstudent Business Operations' to pass when the actual work is analytical.",
+    "weight": 3,
+    "terms": [
+      "daten analysieren",
+      "datenanalyse",
+      "data analysis",
+      "analyze data",
+      "analyze",
+      "analyse",
+      "evaluate",
+      "evaluation",
+      "evaluieren",
+      "evaluierst",
+      "evaluierung",
+      "werten feedbacks",
+      "data-driven",
+      "data driven",
+      "data-diven",
+      "analyse von daten",
+      "auswertung von daten",
+      "datenauswertung",
+      "statistical analysis",
+      "statistische analyse",
+      "exploratory data analysis",
+      "reporting",
+      "dashboard",
+      "kpi reporting",
+      "kpi analyse",
+      "kpi analysis",
+      "kennzahlenanalyse",
+      "data visualization",
+      "datenvisualisierung",
+      "visualisierung",
+      "insights ableiten",
+      "derive insights",
+      "decision support",
+      "entscheidungsvorlage",
+      "business case",
+      "benchmarking",
+      "wettbewerbsanalyse",
+      "competitor analysis",
+      "market analysis",
+      "marktanalyse",
+      "market research",
+      "marktforschung",
+      "customer analysis",
+      "kundenanalyse",
+      "segmentation",
+      "segmentierung",
+      "pricing analysis",
+      "preisanalyse",
+      "forecasting",
+      "prognose",
+      "predictive modeling",
+      "predictive modelling",
+      "modellierung",
+      "modeling",
+      "regression",
+      "experiment",
+      "a/b test",
+      "ab test",
+      "survey",
+      "befragung",
+      "research design",
+      "forschungsdesign",
+      "data collection",
+      "datenerhebung",
+      "web scraping",
+      "text analysis",
+      "textanalyse",
+      "process analysis",
+      "prozessanalyse",
+      "process mining",
+      "optimization",
+      "optimierung",
+      "scenario analysis",
+      "szenarioanalyse",
+      "due diligence",
+      "pitch evaluation",
+      "startup evaluation",
+      "business model analysis",
+      "geschaeftsmodellanalyse",
+      "portfolio analysis",
+      "performance measurement",
+      "performance-messung",
+      "funnel analysis",
+      "attribution analysis",
+      "conversion analysis"
+      ,"hr-kennzahlen"
+      ,"personalkennzahlen"
+      ,"mitarbeiterbefragung auswerten"
+      ,"employee survey analysis"
+      ,"variance analysis"
+      ,"abweichungsanalyse"
+      ,"financial analysis"
+      ,"risikoanalyse"
+      ,"risk assessment"
+      ,"risk evaluation"
+      ,"root cause analysis"
+      ,"ursachenanalyse"
+      ,"prozessbewertung"
+      ,"process evaluation"
+      ,"literature research"
+      ,"literaturrecherche"
+      ,"auswertung"
+      ,"auswertungen"
+      ,"kennzahlen auswerten"
+      ,"plan-ist-vergleich"
+      ,"soll-ist-vergleich"
+      ,"risikobewertung"
+      ,"bewertung von risiken"
+      ,"logistikprozesse analysieren"
+      ,"datenqualitaetskennzahlen"
+      ,"data quality metrics"
+      ,"ueberwachung von datenqualitaetskennzahlen"
+    ]
+  },
+
+  "methods": {
+    "_comment": "Methods and analytical concepts that map to Farzad's ten CV variants. They strengthen relevance but do not pass the gate alone.",
+    "weight": 3,
+    "terms": [
+      "regression",
+      "panel data",
+      "paneldaten",
+      "fixed effects",
+      "difference-in-differences",
+      "difference in differences",
+      "instrumental variable",
+      "instrumentvariable",
+      "econometrics",
+      "oekonometrie",
+      "causal inference",
+      "kausalanalyse",
+      "a/b testing",
+      "a/b test",
+      "experiment design",
+      "experimental design",
+      "machine learning",
+      "maschinelles lernen",
+      "predictive analytics",
+      "predictive modeling",
+      "classification",
+      "klassifikation",
+      "clustering",
+      "pca",
+      "feature engineering",
+      "time series",
+      "zeitreihe",
+      "arima",
+      "ets",
+      "prophet",
+      "random forest",
+      "xgboost",
+      "neural network",
+      "neuronales netz",
+      "rnn",
+      "lstm",
+      "natural language processing",
+      "nlp",
+      "text mining",
+      "topic modeling",
+      "topic modelling",
+      "bertopic",
+      "sentiment analysis",
+      "web scraping",
+      "survey design",
+      "umfragedesign",
+      "qualitative analysis",
+      "qualitative analyse",
+      "interview",
+      "focus group",
+      "fokusgruppe",
+      "delphi",
+      "qca",
+      "fsqca",
+      "factor analysis",
+      "faktorenanalyse",
+      "structural equation model",
+      "sem",
+      "meta-analysis",
+      "meta-analyse",
+      "ahp",
+      "topsis",
+      "mcdm",
+      "multicriteria",
+      "multi-criteria",
+      "sensitivity analysis",
+      "sensitivitaetsanalyse",
+      "cohort analysis",
+      "kohortenanalyse",
+      "rfm",
+      "customer lifetime value",
+      "clv",
+      "churn",
+      "attribution",
+      "incrementality",
+      "price elasticity",
+      "preiselastizitaet"
+    ]
+  },
+
+  "tools_strong": {
+    "_comment": "Applied or established tools from the master CV. They strengthen a role after relevance is established.",
+    "weight": 2,
+    "terms": [
+      "python",
+      "sql",
+      "microsoft sql server",
+      "power bi",
+      "dax",
+      "power query",
+      "tableau",
+      "excel",
+      "vba",
+      "r studio",
+      "rstudio",
+      "stata",
+      "spss",
+      "minitab",
+      "google analytics",
+      "ga4",
+      "salesforce",
+      "hubspot",
+      "qualtrics",
+      "soscisurvey",
+      "nvivo",
+      "maxqda",
+      "selenium",
+      "beautifulsoup",
+      "git",
+      "github"
+    ]
+  },
+
+  "tools_basic_or_adjacent": {
+    "_comment": "Low-weight terms from basic knowledge or adjacent tooling. Never use these to claim applied experience in application material.",
+    "weight": 1,
+    "terms": [
+      "dbt",
+      "star schema",
+      "dimensional modeling",
+      "dimensional modelling",
+      "analytics engineering",
+      "pyomo",
+      "gurobi",
+      "simpy",
+      "dowhy",
+      "econml"
+    ]
+  },
+
+  "context_bonus": {
+    "_comment": "Useful organizational contexts for the ten CV families. Context never passes the relevance gate by itself.",
+    "weight": 2,
+    "terms": [
+      "data & analytics",
+      "data and analytics",
+      "analytics team",
+      "business intelligence team",
+      "strategy team",
+      "corporate development team",
+      "innovation team",
+      "digital transformation team",
+      "startup",
+      "scale-up",
+      "venture capital",
+      "corporate venture",
+      "incubator",
+      "accelerator",
+      "gruenderzentrum",
+      "gruendungszentrum",
+      "technologietransfer",
+      "research institute",
+      "forschungsinstitut",
+      "research center",
+      "forschungszentrum",
+      "consulting",
+      "beratung",
+      "market intelligence",
+      "market research",
+      "e-commerce",
+      "digital product",
+      "saas",
+      "platform business",
+      "plattformgeschaeft",
+      "family business",
+      "familienunternehmen",
+      "mittelstand",
+      "kmu",
+      "sme"
+    ]
+  },
+
+  "title_boost": {
+    "_comment": "Added once if any target term appears in the title. This helps relevant student roles rise above generic postings.",
+    "weight": 4,
+    "terms": [
+      "data",
+      "analytics",
+      "business intelligence",
+      "reporting",
+      "forecast",
+      "planning",
+      "strategy",
+      "strategie",
+      "business development",
+      "unternehmensentwicklung",
+      "market intelligence",
+      "marktforschung",
+      "marktanalyse",
+      "research",
+      "forschung",
+      "consulting",
+      "beratung",
+      "startup",
+      "venture",
+      "gruendung",
+      "innovation",
+      "technologietransfer",
+      "transfer",
+      "digital transformation",
+      "digitalisierung",
+      "digital analytics",
+      "web analytics",
+      "marketing analytics",
+      "product analytics",
+      "business operations"
+    ]
+  },
+
+  "kill_conditional": {
+    "_comment": "Title-based exclusions only. Strategic, analytical, research, and English-friendly HR remains eligible; pure HR administration is excluded unless strong B01-B10 or analytical body evidence rescues it.",
+    "rule": "title_match AND no_strong_cv_family_hit_in_body AND no_analysis_task_hit_in_body",
+    "clinical_healthcare": [
+      "pflegefachkraft",
+      "pflegehelfer",
+      "altenpflege",
+      "krankenpflege",
+      "medizinische fachangestellte",
+      "arzt",
+      "aerztin",
+      "therapeut",
+      "physiotherapie",
+      "ergotherapie",
+      "zahnarzt",
+      "zahnmedizin"
+    ],
+    "manual_trades_production": [
+      "elektriker",
+      "elektroniker",
+      "mechatroniker",
+      "mechaniker",
+      "monteur",
+      "schlosser",
+      "schweisser",
+      "produktionshelfer",
+      "maschinenbediener",
+      "lagerhelfer",
+      "kommissionierer",
+      "kraftfahrer",
+      "fahrer",
+      "hausmeister",
+      "reinigungskraft"
+    ],
+    "hospitality_retail_service": [
+      "verkaeufer",
+      "kassierer",
+      "servicekraft",
+      "kellner",
+      "koch",
+      "kuechenhilfe",
+      "hotelmitarbeiter",
+      "rezeptionist",
+      "customer service agent",
+      "call center agent"
+    ],
+    "pure_engineering_science": [
+      "maschinenbauingenieur",
+      "elektroingenieur",
+      "bauingenieur",
+      "chemielaborant",
+      "biologielaborant",
+      "laborant",
+      "lab technician",
+      "mechanical engineer",
+      "electrical engineer",
+      "civil engineer",
+      "chemical engineer"
+    ],
+    "pure_software_it_ops": [
+      "softwareentwickler",
+      "software developer",
+      "frontend developer",
+      "front-end developer",
+      "backend developer",
+      "back-end developer",
+      "full stack developer",
+      "full-stack developer",
+      "devops engineer",
+      "systemadministrator",
+      "system administrator",
+      "it support",
+      "helpdesk",
+      "network engineer",
+      "cybersecurity",
+      "security operations center",
+      "soc analyst"
+    ],
+    "pure_hr_admin": [
+      "recruiter",
+      "recruiting",
+      "talent acquisition",
+      "personalsachbearbeiter",
+      "lohnabrechnung",
+      "payroll",
+      "office management",
+      "sekretariat",
+      "empfang"
+    ],
+    "pure_accounting_legal": [
+      "buchhalter",
+      "buchhaltung",
+      "accountant",
+      "steuerberater",
+      "tax assistant",
+      "rechtsanwaltsfachangestellte",
+      "rechtsanwalt",
+      "jurist",
+      "legal counsel"
+    ],
+    "pure_creative_content": [
+      "grafikdesigner",
+      "graphic designer",
+      "video editor",
+      "content creator",
+      "copywriter",
+      "texter",
+      "social media manager"
+    ],
+    "pure_sales": [
+      "sales representative",
+      "sales development representative",
+      "vertriebsmitarbeiter",
+      "aussendienst",
+      "account executive",
+      "telefonvertrieb",
+      "door to door"
+    ],
+    "education_pedagogy": [
+      "kindheitspaedagoge",
+      "kindheitspaedagogin",
+      "paedagogische fachkraft",
+      "paedagogischer mitarbeiter",
+      "paedagogische mitarbeiter",
+      "praxisanleiter",
+      "praxisanleitung",
+      "erzieher",
+      "sozialpaedagoge",
+      "sozialpaedagogin"
+    ],
+    "customer_support_talking": [
+      "callcenter",
+      "call-center",
+      "call center",
+      "kundenbetreuer",
+      "kundenberater",
+      "customer service agent",
+      "telefonische kundenbetreuung",
+      "telefonischer kundenbetreuer",
+      "telefonische kundenberater",
+      "e-mail-agent",
+      "email-agent",
+      "first level support",
+      "1st level support"
+    ],
+    "operations_logistics_management": [
+      "produktionsmitarbeiter",
+      "schichtleiter",
+      "vorarbeiter",
+      "lager team coordinator",
+      "umschlagslager",
+      "logistiker",
+      "bereichsleiter logistik",
+      "operations manager logistik",
+      "logistik manager",
+      "area manager"
+    ],
+    "construction_and_generic_engineering": [
+      "projektingenieur",
+      "konstruktiver ingenieurbau",
+      "hochbau",
+      "verkehrsanlagen",
+      "facility manager",
+      "sicherheitsingenieur",
+      "verifikationsingenieur",
+      "verfahrenstechnik"
+    ]
+  },
+
+  "penalty": {
+    "_comment": "Penalties reduce rank but never remove a job after the gates pass.",
+    "language_de_high": {
+      "value": -5,
+      "flag": "GERMAN C1+ / NATIVE-LEVEL",
+      "terms": [
+        "sehr gute deutschkenntnisse",
+        "sehr gutes deutsch",
+        "verhandlungssichere deutschkenntnisse",
+        "verhandlungssicheres deutsch",
+        "deutsch auf muttersprachniveau",
+        "muttersprachliche deutschkenntnisse",
+        "deutschkenntnisse c1",
+        "deutschkenntnisse c2",
+        "deutsch c1",
+        "deutsch c2",
+        "fliessende deutschkenntnisse",
+        "fliessendes deutsch",
+        "fliessend deutsch",
+        "exzellente deutschkenntnisse",
+        "hervorragende deutschkenntnisse",
+        "hervorragendes deutsch",
+        "sehr gut auf deutsch",
+        "fluent in german",
+        "fluency in german",
+        "german fluency",
+        "business fluent german",
+        "business fluent in german",
+        "native-level german",
+        "near-native german",
+        "professional proficiency in german",
+        "full professional proficiency in german",
+        "excellent command of german",
+        "fluent german",
+        "native german",
+        "german c1",
+        "german c2"
+      ]
+    },
+    "language_de_medium": {
+      "value": -1,
+      "flag": "GERMAN B2 / GOOD GERMAN",
+      "terms": [
+        "gute deutschkenntnisse",
+        "deutschkenntnisse b2",
+        "deutsch b2",
+        "good german",
+        "german b2",
+        "working knowledge of german"
+      ]
+    },
+    "sales_heavy": {
+      "value": -2,
+      "flag": "SALES / OUTREACH HEAVY",
+      "terms": [
+        "cold calling",
+        "kaltakquise",
+        "telefonakquise",
+        "lead generation",
+        "sales targets",
+        "vertriebsziele",
+        "kundenakquise",
+        "neukundenakquise"
+      ]
+    },
+    "travel_heavy": {
+      "value": -1,
+      "flag": "HIGH TRAVEL",
+      "terms": [
+        "hohe reisebereitschaft",
+        "regelmaessige dienstreisen",
+        "frequent travel",
+        "high willingness to travel"
+      ]
+    }
+  },
+
+  "bonus": {
+    "_comment": "Bonuses improve rank but do not override gates.",
+    "english_environment": {
+      "value": 2,
+      "flag": "ENGLISH-FRIENDLY",
+      "terms": [
+        "arbeitssprache englisch",
+        "working language is english",
+        "english is the working language",
+        "german is not required",
+        "no german required",
+        "deutschkenntnisse sind nicht erforderlich",
+        "international team",
+        "internationales team",
+        "fluent english",
+        "sehr gute englischkenntnisse"
+      ]
+    },
+    "exact_student_format_in_title": {
+      "value": 2,
+      "flag": "EXACT STUDENT FORMAT",
+      "terms": [
+        "werkstudent",
+        "working student",
+        "praktikum",
+        "praktikant",
+        "internship"
+      ]
+    }
+  },
+
+  "eligibility_flags": {
+    "_comment": "Visible only. No automatic legal conclusion and no automatic drop.",
+    "enrollment_required": {
+      "flag": "IMMATRIKULATION REQUIRED",
+      "terms": [
+        "immatrikuliert",
+        "immatrikulation",
+        "eingeschriebener student",
+        "eingeschriebene studentin",
+        "enrolled student",
+        "currently enrolled",
+        "student status"
+      ]
+    },
+    "mandatory_internship": {
+      "flag": "PFLICHTPRAKTIKUM",
+      "terms": [
+        "pflichtpraktikum",
+        "mandatory internship",
+        "compulsory internship",
+        "vorgeschriebenes praktikum",
+        "studienordnung"
+      ]
+    },
+    "remaining_study_time": {
+      "flag": "MINIMUM REMAINING STUDY TIME",
+      "terms": [
+        "noch mindestens 12 monate immatrikuliert",
+        "noch mindestens 6 monate immatrikuliert",
+        "at least 12 months remaining",
+        "at least 6 months remaining",
+        "remaining study period"
+      ]
+    },
+    "work_authorization": {
+      "flag": "WORK-AUTHORIZATION / CITIZENSHIP CHECK",
+      "terms": [
+        "eu citizenship",
+        "eu citizen",
+        "european union citizenship",
+        "valid work permit",
+        "arbeitserlaubnis",
+        "arbeitsberechtigung",
+        "security clearance",
+        "sicherheitsueberpruefung",
+        "zuverlaessigkeitsueberpruefung"
+      ]
+    },
+    "duration": {
+      "flag": "DURATION REQUIREMENT",
+      "terms": [
+        "mindestens 3 monate",
+        "mindestens 4 monate",
+        "mindestens 5 monate",
+        "mindestens 6 monate",
+        "minimum 3 months",
+        "minimum 4 months",
+        "minimum 5 months",
+        "minimum 6 months"
+      ]
+    }
+  },
+
+  "soft_flag": {
+    "_comment": "Recorded only; no score effect.",
+    "weight": 0,
+    "terms": [
+      "homeoffice",
+      "remote",
+      "hybrid",
+      "praesenz",
+      "on-site",
+      "onsite",
+      "10 stunden",
+      "15 stunden",
+      "20 stunden",
+      "20h",
+      "20 h",
+      "16 stunden",
+      "18 stunden",
+      "24 stunden",
+      "30 stunden",
+      "vollzeitpraktikum",
+      "full-time internship",
+      "befristet",
+      "fixed-term",
+      "flexible arbeitszeiten",
+      "flexible working hours"
+    ]
+  },
+
+  "cv_family_tie_breakers": {
+    "_comment": "Used only when two or more families have equal family scores.",
+    "rules": [
+      "If venture/investment/deal-flow/due-diligence terms match, prefer B04 over B03.",
+      "If incubator/founder-support/technology-transfer/ecosystem terms match, prefer B03 over B04.",
+      "If forecasting/demand/supply/inventory/time-series terms match, prefer B05 over B06.",
+      "If web/funnel/conversion/attribution/GA4 terms match, prefer B09 over B06.",
+      "If market-research/competitive-intelligence/consumer-insights terms match, prefer B07 over B06 or B02.",
+      "If digital-transformation/process-digitalization/transformation-office terms match, prefer B10 over B02.",
+      "If consulting/advisory is explicit in title and another family is close, prefer B08 but record the second family too.",
+      "If generic analytics/data/reporting terms dominate with no more specific family, prefer B06.",
+      "Always export primary_cv_family and secondary_cv_family when the second family is within 2 family-match points of the first."
+    ]
+  },
+
+  "regex": {
+    "employment_title": "\\b(werkstudent(?:in)?|werkstudierende[rs]?|praktikant(?:in)?|praktikum|working[- ]student|internship|intern|trainee|graduate (?:program|programme|scheme)|berufseinsteiger|bachelorarbeit|masterarbeit|abschlussarbeit|thesis|studentische hilfskraft|wissenschaftliche hilfskraft|student (?:research )?assistant|student employee|hiwi)\\b",
+    "penalty_language_de_high": "((?:sehr\\s+gut\\w*|fliessend\\w*|verhandlungssicher\\w*|muttersprachlich\\w*|hervorragend\\w*|exzellent\\w*)\\s+(?:in\\s+|auf\\s+)?deutsch(?:kenntnis\\w*)?(?:\\s*-?\\s*und\\s+\\w+kenntnis\\w*)?|deutsch\\w*\\s*(?:kenntnisse)?\\s*(?:auf\\s+)?(?:niveau\\s*)?(?:c1|c2)|deutsch\\w*\\s+auf\\s+muttersprach|(?:fluent|fluency|business[- ]fluent|professional proficiency)\\s+(?:in\\s+)?german|(?:german|deutsch)(?:(?:\\s*[-/&]\\s*|\\s+)(?:and|und)\\s+\\w+)?\\s+(?:fliessend\\w*|verhandlungssicher\\w*|fluency|native[- ]level)|(?:german|deutsch)\\s*(?:language\\s*)?(?:level\\s*)?(?:c1|c2))",
+    "flag_deadline": "(bewerbungsfrist|bewerbungsschluss|bewerbungen\\s+bis|application\\s+deadline|apply\\s+by|closing\\s+date)\\D{0,25}(\\d{1,2}[.\\/]\\d{1,2}[.\\/]\\d{2,4}|\\d{4}-\\d{2}-\\d{2})",
+    "flag_hours": "(\\d{1,2}([,.]\\d)?)\\s*(stunden|std|h)\\s*(pro|/)\\s*(woche|week)",
+    "flag_duration_months": "(mindestens|min\\.?|minimum|fuer|for)\\s*(\\d{1,2})\\s*(monate|months)",
+    "flag_start_date": "(ab|start|starting|beginn)\\D{0,20}(\\d{1,2}[.\\/]\\d{1,2}[.\\/]\\d{2,4}|\\d{4}-\\d{2}-\\d{2})"
+  }
+}

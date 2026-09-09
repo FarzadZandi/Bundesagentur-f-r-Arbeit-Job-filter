@@ -1,0 +1,39 @@
+# Python environments, bytecode, and tooling
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Local configuration and search inputs
+config.yaml
+config.local.yaml
+urls.txt
+Command.txt
+.env
+.env.*
+!.env.example
+
+# Runtime state and generated artifacts
+cache/
+out/
+archive/
+seen.sqlite*
+*.sqlite-shm
+*.sqlite-wal
+.codex_tmp/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini

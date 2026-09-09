@@ -1,0 +1,21 @@
+{
+  "maxErgebnisse": 496,
+  "page": 2,
+  "size": 25,
+  "ergebnisliste": [
+    {
+      "stellenangebotsTitel": "Data Analyst (m/w/d)",
+      "stellenlokationen": [{"adresse": {"plz": "74072", "ort": "Heilbronn"}}],
+      "veroeffentlichungszeitraum": {"von": "2026-08-06"},
+      "firma": "Beispiel Analytics GmbH",
+      "referenznummer": "14357-5116-1788549-0-S"
+    },
+    {
+      "stellenangebotsTitel": "Praktikant Market Research (m/w/d)",
+      "stellenlokationen": [{"adresse": {"plz": "70173", "ort": "Stuttgart"}}],
+      "datumErsteVeroeffentlichung": "2026-08-05",
+      "firma": "Beispiel Strategy GmbH",
+      "referenznummer": "10001-1003496934-S"
+    }
+  ]
+}

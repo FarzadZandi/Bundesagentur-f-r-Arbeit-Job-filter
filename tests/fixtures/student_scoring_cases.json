@@ -1,0 +1,23 @@
+[
+  {"name":"B01_werkstudent_research","title":"Werkstudent Research","body":"Applied research and empirical research. We analyze survey data.","band":"PRIORITY","primary":"B01"},
+  {"name":"B02_praktikum_strategy","title":"Praktikum Strategy Business Development","body":"Corporate strategy and business development. We analyze KPIs and markets.","band":"PRIORITY","primary":"B02"},
+  {"name":"B03_werkstudent_gruenderzentrum","title":"Werkstudent Gründerzentrum Technologietransfer","body":"Founder support in an incubator and technology transfer. Evaluate startup programs.","band":"PRIORITY","primary":"B03"},
+  {"name":"B04_praktikum_venture","title":"Praktikum Venture Capital Startup","body":"Venture capital deal flow and due diligence. Analyze investment opportunities.","band":"PRIORITY","primary":"B04"},
+  {"name":"B05_werkstudent_forecasting","title":"Werkstudent Demand Planning Forecasting","body":"Demand planning, forecasting and inventory analysis using Power BI.","band":"PRIORITY","primary":"B05"},
+  {"name":"B06_werkstudent_bi","title":"Werkstudent Data Analytics BI","body":"Data analytics, business intelligence and KPI reporting using Power BI and SQL.","band":"PRIORITY","primary":"B06"},
+  {"name":"B07_praktikum_market_intelligence","title":"Praktikum Market Intelligence Marktforschung","body":"Market research, competitive intelligence and consumer insights. Analyze survey data.","band":"PRIORITY","primary":"B07"},
+  {"name":"B08_werkstudent_consulting","title":"Werkstudent Analytics Consulting","body":"Analytics consulting and advisory projects. Analyze client KPIs and build dashboards.","band":"PRIORITY","primary":"B08"},
+  {"name":"B09_praktikum_web_analytics","title":"Praktikum Web Analytics","body":"Web analytics with GA4, funnel, conversion and attribution analysis.","band":"PRIORITY","primary":"B09"},
+  {"name":"B10_werkstudent_transformation","title":"Werkstudent Digital Transformation","body":"Digital transformation and process digitalization. Analyze KPIs and processes.","band":"PRIORITY","primary":"B10"},
+  {"name":"trainee_data_analyst","title":"Trainee Data Analyst","body":"Data analytics, KPI reporting and Power BI.","band":"PRIORITY","primary":"B06"},
+  {"name":"software_tools_only_is_dropped","title":"Werkstudent Softwareentwickler","body":"Python, SQL, Git and software development.","band":"DROP","drop_stage":"wrong_profession","reason":"wrong_profession_without_analytical_body"},
+  {"name":"engineering_industry_kept","title":"Werkstudent Data Analytics","body":"Data analysis and KPI reporting at a Maschinenbauunternehmen.","band":"PRIORITY","primary":"B06"},
+  {"name":"business_operations_kept","title":"Werkstudent Business Operations","body":"KPI reporting, Power BI and data analysis.","band":"PRIORITY","primary":"B06"},
+  {"name":"market_research_c1_separated","title":"Werkstudent Market Research","body":"Market research and consumer insights. Analyze surveys. Deutschkenntnisse C1 erforderlich.","band":"DE REQUIRED","reason":"german_c1_c2_or_native_required"},
+  {"name":"pflichtpraktikum_flag","title":"Pflichtpraktikum Data Analytics","body":"Data analytics and KPI reporting with Power BI. Pflichtpraktikum, immatrikuliert.","band":"PRIORITY","primary":"B06","flags":["PFLICHTPRAKTIKUM","IMMATRIKULATION REQUIRED"]},
+  {"name":"venture_tie_breaker","title":"Werkstudent Venture Capital","body":"Due diligence and deal flow for venture capital investments.","band":"PRIORITY","primary":"B04"},
+  {"name":"incubator_tie_breaker","title":"Werkstudent Startup Center","body":"Founder support, startup incubation and ecosystem programs. Evaluate cohorts.","band":"PRIORITY","primary":"B03"},
+  {"name":"forecast_tie_breaker","title":"Werkstudent Demand Planning","body":"Forecasting demand and inventory analysis using Power BI.","band":"PRIORITY","primary":"B05"},
+  {"name":"web_tie_breaker","title":"Praktikum Web Analytics","body":"GA4 funnel conversion attribution and data analysis.","band":"PRIORITY","primary":"B09"},
+  {"name":"transformation_tie_breaker","title":"Werkstudent Digital Transformation","body":"Process digitalization and KPI analysis for digital transformation.","band":"PRIORITY","primary":"B10"}
+]
