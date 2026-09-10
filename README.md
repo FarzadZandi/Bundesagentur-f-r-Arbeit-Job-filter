@@ -1,4 +1,4 @@
-# BA Job Filter
+# Bundesagentur für Arbeit Job Filter
 
 A polite, resumable command-line pipeline for collecting jobs from Germany's Bundesagentur für Arbeit (BA), enriching advertisements from linked employer pages, and ranking them against a configurable set of career profiles.
 
