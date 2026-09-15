@@ -105,7 +105,7 @@ def _pause_before_position(completed: int, next_position: int, config: Config, *
 def run(
     urls: Iterable[str], config: Config, *, max_pages: int | None = None, max_ads: int | None = None,
     since: str | None = None, output_dir: str | Path | None = None,
-) -> tuple[Path, Path, Path, dict[str, BoardStats]]:
+) -> tuple[Path, Path, dict[str, BoardStats]]:
     urls = [url.strip() for url in urls if url.strip()]
     if not urls:
         raise ValueError("At least one --url or a non-empty --urls-file is required")
@@ -209,13 +209,13 @@ def run(
                 board_stats.elapsed += time.monotonic() - started
             if ad_cap is not None and details_attempted >= ad_cap:
                 break
-        paths = write_outputs(scored_jobs, output_dir or config.output_dir)
+        paths = write_outputs(scored_jobs, output_dir or config.output_dir, keywords=keywords)
         for seen_args in pending_seen:
             store.mark_seen(*seen_args)
         summary = {name: vars(value) | {"dropped": dict(value.dropped), "families": dict(value.families)} for name, value in stats.items()}
         summary["elapsed_total"] = time.monotonic() - started_all
         store.finish_run(run_id, status, summary)
-        return paths[0], paths[1], paths[2], stats
+        return paths[0], paths[1], stats
     except BaseException:
         status = "interrupted" if isinstance(__import__('sys').exc_info()[1], KeyboardInterrupt) else "failed"
         store.finish_run(run_id, status, {})

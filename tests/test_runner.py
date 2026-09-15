@@ -69,11 +69,15 @@ def test_position_pause_is_short_between_ads_and_long_at_batch_boundary(monkeypa
     assert sleeps == [4.0, 30.0]
 
 
-def test_operational_defaults_use_resumable_500_ad_batches():
+def test_operational_defaults_scrape_all_with_polite_position_pacing():
     config = Config()
-    assert config.max_ads == 500
-    assert config.position_delay_min == 0.5
-    assert config.position_delay_max == 2.0
+    assert config.max_ads == 0
+    assert config.position_delay_min == 3.0
+    assert config.position_delay_max == 5.0
+    assert config.position_batch_size_min == 50
+    assert config.position_batch_size_max == 100
+    assert config.position_batch_pause_min == 60.0
+    assert config.position_batch_pause_max == 120.0
 
 
 def test_summary_contains_required_counts_and_b01_b10():

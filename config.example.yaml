@@ -13,18 +13,18 @@ long_pause_min: 15.0
 long_pause_max: 30.0
 
 # Independent pacing between advertisements, including cached pages.
-position_delay_min: 0.5
-position_delay_max: 2.0
-position_batch_size_min: 90
+position_delay_min: 3.0
+position_delay_max: 5.0
+position_batch_size_min: 50
 position_batch_size_max: 100
-position_batch_pause_min: 45.0
-position_batch_pause_max: 60.0
+position_batch_pause_min: 60.0
+position_batch_pause_max: 120.0
 
 max_retries: 3
 request_timeout: 30.0
 
-# Zero means unlimited. A bounded advertisement count makes runs resumable.
-max_ads: 500
+# Zero means unlimited.
+max_ads: 0
 max_pages: 0
 
 # Prefer the public BA JSON endpoint, with safe HTML fallback.

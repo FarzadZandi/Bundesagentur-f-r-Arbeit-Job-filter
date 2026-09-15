@@ -19,15 +19,15 @@ class Config:
     long_pause_every: int = 25
     long_pause_min: float = 15.0
     long_pause_max: float = 30.0
-    position_delay_min: float = 0.5
-    position_delay_max: float = 2.0
-    position_batch_size_min: int = 90
+    position_delay_min: float = 3.0
+    position_delay_max: float = 5.0
+    position_batch_size_min: int = 50
     position_batch_size_max: int = 100
-    position_batch_pause_min: float = 45.0
-    position_batch_pause_max: float = 60.0
+    position_batch_pause_min: float = 60.0
+    position_batch_pause_max: float = 120.0
     max_retries: int = 3
     request_timeout: float = 30.0
-    max_ads: int = 500
+    max_ads: int = 0
     max_pages: int = 0
     arbeitsagentur_use_api: bool = True
     thresholds: dict[str, int] = field(default_factory=lambda: {"priority": 12, "review": 6})

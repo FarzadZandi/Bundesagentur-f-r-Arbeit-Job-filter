@@ -2,8 +2,8 @@
   "_meta": {
     "name": "B01-B10 job filter dictionary for Farzad Zandi (DE/EN)",
     "owner": "Farzad Zandi",
-    "version": "1.7",
-    "date": "2026-09-06",
+    "version": "2.3",
+    "date": "2026-09-11",
     "scope": "Germany. Full-time roles and non-full-time early-career roles, limited to CV families B01-B10.",
     "normalization": "Lowercase; map ä→ae, ö→oe, ü→ue, ß→ss; collapse whitespace; strip HTML. Terms below are written mainly in normalized form.",
     "decision_order": [
@@ -26,7 +26,9 @@
       "DROP": "a definite exclusion matched, such as a non-target employment format, excluded commercial profession, wrong profession without analytical evidence, or talking-centered marketing without research/analytics"
     },
     "important_rules": [
-      "Sehr gute/verhandlungssichere/native-level German and C1/C2 German route a B01-B10 match to DE Required, except consulting roles, which are dropped when they require that level of German. B2/good German remains a penalty.",
+      "Sehr gute/verhandlungssichere/native-level German and C1/C2 German route a relevant B01-B10 match to DE Required. B2/good German remains a penalty.",
+      "PRIORITY requires explicit target-family evidence in the title. Body-only matches remain in REVIEW.",
+      "Academic, explicit senior/leadership, and pure software/IT infrastructure title gates run before body scoring and cannot be rescued by generic body wording.",
       "Immatrikulation, Pflichtpraktikum, minimum remaining study time, visa/work-permit, EU citizenship and security-clearance wording are flags only. Do not infer legal eligibility from them.",
       "Recall-first relevance: a strong B01-B10 family match passes by itself. A weak family match passes only when paired with an analysis task or an English-language advertisement.",
       "Industries are not excluded. Exclusions are profession/title based and conditional so an analytics role in manufacturing, healthcare, finance or engineering can still pass.",
@@ -187,6 +189,8 @@
         "sales manger",
         "sales assistant",
         "sales development representative",
+        "sales & business development",
+        "sales and business development",
         "vertriebsmitarbeiter",
         "vertrieb",
         "aussendienst",
@@ -198,18 +202,39 @@
         "telefonvertrieb"
       ]
     },
-    "german_consulting_title_roles": {
-      "reason": "german_c1_c2_or_native_required_for_consulting",
+    "senior_title_roles": {
+      "reason": "excluded_senior_or_leadership_role",
       "terms": [
-        "consultant",
-        "consulting",
-        "berater",
-        "beraterin",
-        "beratung"
+        "senior", "principal", "director", "head of", "chief ", "vice president",
+        "team lead", "tech lead", "group leader", "research group leader", "lead developer", "lead engineer", "lead architect",
+        "lead consultant", "lead data scientist", "lead analyst", "leitender", "leitende",
+        "teamleiter", "teamleiterin", "gruppenleiter", "bereichsleiter", "abteilungsleiter",
+        "niederlassungsleiter", "standortleiter"
+      ]
+    },
+    "pure_it_title_roles": {
+      "reason": "excluded_pure_software_it_role",
+      "all_term_sets": [
+        ["sap", "consultant"],
+        ["sap", "berater"]
+      ],
+      "terms": [
+        "softwareentwickler", "softwareentwicklerin", "software developer", "software engineer",
+        "frontend developer", "backend developer", "full stack developer", "fullstack developer",
+        "devops", "site reliability engineer", "systemadministrator", "system administrator",
+        "it support", "helpdesk", "service desk", "network engineer", "netzwerkadministrator",
+        "cyber security", "cybersecurity", "soc analyst", "security engineer", "cloud engineer",
+        "cloud architect", "solution architect", "solutions architect", "enterprise architect",
+        "sap basis", "sap abap", "sap entwickler", "sap developer", "sap architect",
+        "sap consultant", "sap berater", "sap anwendungsberater", "erp consultant", "erp-consultant",
+        "sap fi", "sap sd", "sap cs", "sap car", "sap s/4hana", "fi/co consultant",
+        "it consultant", "it-consultant", "it berater", "it-berater", "it beratung", "it-beratung",
+        "m365 berater", "berater m365", "m365 consultant", "cloud berater", "berater cloud", "cloud consultant",
+        "automation consultant"
       ]
     },
     "academic_title_roles": {
-      "reason": "excluded_doctoral_candidate_role",
+      "reason": "academic_research_or_professorship_role",
       "terms": [
         "doktorand",
         "doktorandin",
@@ -217,9 +242,31 @@
         "doctoral researcher",
         "phd candidate",
         "phd student",
-        "promotionsstelle"
+        "promotionsstelle",
+        "professor", "professorin", "professur", "juniorprofessor",
+        "wissenschaftlicher mitarbeiter", "wissenschaftliche mitarbeiterin", "wissenschaftliche mitarbeiter",
+        "wissenschaftliche/r mitarbeiter", "wissenschaftliche*r mitarbeiter", "akademische*r mitarbeiter", "akademischer mitarbeiter",
+        "akademische mitarbeiterin", "academic researcher", "research associate",
+        "research fellow", "researcher in ", "postdoc", "postdoctoral researcher"
       ]
     }
+  },
+
+  "priority_title_evidence": {
+    "_comment": "A score can enter PRIORITY only when the normalized title contains at least one of these target-family signals. Generic body wording alone remains REVIEW.",
+    "terms": [
+      "research", "forschung", "wissenschaft", "strategy", "strategie", "strategic",
+      "business development", "corporate development", "unternehmensentwicklung",
+      "startup", "venture", "innovation", "technologietransfer", "technology transfer",
+      "forecast", "demand planning", "absatzplanung", "controlling", "controller", "fp&a",
+      "data analyst", "data analytics", "business analyst", "business intelligence", " bi ",
+      "data scientist", "data science", "data engineer", "analytics", "marktforschung",
+      "market research", "market intelligence", "competitive intelligence", "consumer insights",
+      "consultant", "consulting", "berater", "beratung", "advisory", "web analytics",
+      "digital analytics", "marketing analytics", "product analytics", "digital transformation",
+      "digitale transformation", "prozessdigitalisierung", "process digitalization",
+      "operational excellence", "process excellence", "prozessanalyse", "kpi", "reporting"
+    ]
   },
 
   "marketing_talking_exclusion": {

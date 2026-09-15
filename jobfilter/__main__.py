@@ -48,14 +48,13 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(result.as_dict(), ensure_ascii=False, indent=2))
         return 0
     if args.command == "run":
-        full_time_xlsx, other_xlsx, digest, stats = run(
+        full_time_xlsx, other_xlsx, stats = run(
             _urls(args), config, max_pages=args.max_pages, max_ads=args.max_ads,
             since=args.since, output_dir=args.out,
         )
         print(format_summary(stats))
         print(f"Vollzeit Excel: {full_time_xlsx}")
         print(f"Other Excel: {other_xlsx}")
-        print(f"Digest: {digest}")
         return 0
     adapter = adapter_for_url(args.url)
     fetcher = Fetcher(config)

@@ -10,6 +10,7 @@ from typing import Any, Mapping
 
 UMLAUT_TABLE = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss"})
 FAMILY_PREFIXES = tuple(f"B{index:02d}" for index in range(1, 11))
+SCORING_RULE_VERSION = "2.3-2026-09-11"
 
 
 @dataclass(frozen=True)
@@ -64,7 +65,7 @@ def load_keywords(path: str | Path) -> dict[str, Any]:
     with Path(path).open(encoding="utf-8") as handle:
         data = json.load(handle)
     required = {
-        "_meta", "employment_gate", "hard_exclusion", "marketing_talking_exclusion",
+        "_meta", "employment_gate", "hard_exclusion", "priority_title_evidence", "marketing_talking_exclusion",
         "relevance_gate", "cv_families", "analysis_task",
         "methods", "tools_strong", "tools_basic_or_adjacent", "context_bonus",
         "title_boost", "kill_conditional", "penalty", "bonus", "eligibility_flags", "regex",
@@ -300,6 +301,30 @@ def _collect_flags(text: str, groups: Mapping[str, Any]) -> tuple[str, ...]:
     return tuple(dict.fromkeys(values))
 
 
+def title_gate(title: str, keywords: Mapping[str, Any]) -> tuple[str, str, str] | None:
+    """Return a deterministic title-only route before body relevance scoring."""
+    normalized_title = normalize(title)
+    for group_name, band, stage in (
+        ("academic_title_roles", "ACADEMISCHE", ""),
+        ("senior_title_roles", "DROP", "seniority_gate"),
+        ("pure_it_title_roles", "DROP", "pure_it_title_gate"),
+        ("commercial_title_roles", "DROP", "commercial_role_gate"),
+    ):
+        group = keywords["hard_exclusion"].get(group_name, {})
+        hits = list(_hits(normalized_title, group))
+        for required_terms in group.get("all_term_sets", ()):
+            normalized_terms = tuple(normalize(str(term)) for term in required_terms)
+            if all(_hits(normalized_title, [term]) for term in normalized_terms):
+                hits.append(" + ".join(normalized_terms))
+        if hits:
+            return band, str(group["reason"]), hits[0]
+    return None
+
+
+def priority_title_hits(title: str, keywords: Mapping[str, Any]) -> tuple[str, ...]:
+    return _hits(normalize(title), keywords["priority_title_evidence"])
+
+
 def score_text(
     title: str,
     body: str,
@@ -317,14 +342,29 @@ def score_text(
         return _drop("employment_gate", "employment_format_not_target")
     employment_format, other_formats = gate
 
-    academic_group = keywords["hard_exclusion"].get("academic_title_roles", {})
-    academic_hits = _hits(normalized_title, academic_group)
-    if academic_hits:
+    deterministic_title_gate = title_gate(title, keywords)
+    if deterministic_title_gate:
+        gate_band, gate_reason, gate_term = deterministic_title_gate
+        group_name = (
+            "academic_title_roles" if gate_band == "ACADEMISCHE"
+            else "senior_title_roles" if gate_reason == "excluded_senior_or_leadership_role"
+            else "commercial_title_roles" if gate_reason == "excluded_einkauf_seller_or_sales_role"
+            else "pure_it_title_roles"
+        )
+        title_matched = {f"hard_exclusion.{group_name}": (gate_term,)}
+        if gate_band == "DROP":
+            return _drop(
+                "seniority_gate" if group_name == "senior_title_roles" else "commercial_role_gate" if group_name == "commercial_title_roles" else "pure_it_title_gate",
+                gate_reason,
+                gate_term,
+                title_matched,
+                employment_format,
+            )
         return _special(
             "ACADEMISCHE",
-            str(academic_group["reason"]),
-            matched_term=academic_hits[0],
-            matched={"hard_exclusion.academic_title_roles": academic_hits},
+            gate_reason,
+            matched_term=gate_term,
+            matched=title_matched,
             employment_format=employment_format,
         )
 
@@ -333,24 +373,6 @@ def score_text(
     german_regex = _regex_hit(full_text, keywords["regex"].get("penalty_language_de_high"))
     if german_regex and german_regex not in german_hits:
         german_hits.append(german_regex)
-    german_consulting_group = keywords["hard_exclusion"].get("german_consulting_title_roles", {})
-    german_consulting_hits = _hits(normalized_title, german_consulting_group)
-    if german_hits and german_consulting_hits:
-        return _drop(
-            "language_gate",
-            str(german_consulting_group["reason"]),
-            german_hits[0],
-            {
-                "hard_exclusion.language_de_high": tuple(german_hits),
-                "hard_exclusion.german_consulting_title_roles": german_consulting_hits,
-            },
-            employment_format,
-        )
-    commercial_group = keywords["hard_exclusion"]["commercial_title_roles"]
-    commercial_hits = _hits(normalized_title, commercial_group)
-    if commercial_hits:
-        return _drop("commercial_role_gate", str(commercial_group["reason"]), commercial_hits[0], {"hard_exclusion.commercial_title_roles": commercial_hits}, employment_format)
-
     body_strong: dict[str, tuple[str, ...]] = {}
     for key, family in keywords["cv_families"].items():
         body_strong[_family_id(key)] = _hits(normalized_body, family["strong_terms"])
@@ -433,33 +455,6 @@ def score_text(
             ),
             "",
         )
-        academic_research_terms = (
-            "wissenschaftlicher mitarbeiter",
-            "wissenschaftliche mitarbeiterin",
-            "research associate",
-            "research fellow",
-            "postdoc",
-            "postdoctoral researcher",
-        )
-        if any(term in normalized_title for term in academic_research_terms):
-            return _special(
-                "ACADEMISCHE",
-                "academic_research_requires_manual_review",
-                matched_term=next(term for term in academic_research_terms if term in normalized_title),
-                matched=matched,
-                employment_format=employment_format,
-                primary_cv_family=primary_label,
-                secondary_cv_family=secondary_label,
-                family_scores=family_points,
-            )
-        if german_hits:
-            return _drop(
-                "language_gate",
-                str(german_group["reason"]),
-                german_hits[0],
-                matched | {"hard_exclusion.language_de_high": tuple(german_hits)},
-                employment_format,
-            )
         return _special(
             "REVIEW",
             "uncertain_relevance_requires_manual_review",
@@ -481,6 +476,8 @@ def score_text(
         raw_score += _group_points(hits, int(keywords[name]["weight"]))
     title_hits = _hits(normalized_title, keywords["title_boost"])
     matched["title_boost"] = title_hits
+    qualifying_title_hits = priority_title_hits(title, keywords)
+    matched["priority_title_evidence"] = qualifying_title_hits
     if title_hits:
         raw_score += int(keywords["title_boost"]["weight"])
 
@@ -536,8 +533,10 @@ def score_text(
     review_at = int(thresholds.get("review", 6))
     if german_hits:
         band, reason = "DE REQUIRED", str(german_group["reason"])
-    elif score >= priority_at:
+    elif score >= priority_at and qualifying_title_hits:
         band, reason = "PRIORITY", None
+    elif score >= priority_at:
+        band, reason = "REVIEW", "priority_requires_target_title_evidence"
     elif score >= review_at or (language_flags and raw_score >= review_at):
         band, reason = "REVIEW", None
     else:

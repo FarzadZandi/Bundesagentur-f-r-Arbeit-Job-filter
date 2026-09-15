@@ -62,18 +62,18 @@ def test_explicit_doctoral_candidate_titles_are_separated():
         )
         assert result.band == "ACADEMISCHE"
         assert result.drop_stage == ""
-        assert result.reason == "excluded_doctoral_candidate_role"
+        assert result.reason == "academic_research_or_professorship_role"
 
 
-def test_relevant_non_doctoral_university_position_can_pass():
+def test_relevant_non_doctoral_university_position_is_separated():
     result = score_text(
         "Wissenschaftlicher Mitarbeiter Market Research",
         "Market research, consumer insights and data analysis at a university institute.",
         KEYWORDS,
         employment_type="Vollzeit",
     )
-    assert result.band in {"PRIORITY", "REVIEW"}
-    assert result.primary_cv_family.startswith(("B01", "B07"))
+    assert result.band == "ACADEMISCHE"
+    assert result.reason == "academic_research_or_professorship_role"
     assert result.employment_format == "FULL-TIME / VOLLZEIT"
 
 
@@ -157,7 +157,7 @@ def test_uncertain_academic_research_goes_to_academische():
         employment_type="Vollzeit",
     )
     assert result.band == "ACADEMISCHE"
-    assert result.reason == "academic_research_requires_manual_review"
+    assert result.reason == "academic_research_or_professorship_role"
 
 
 def test_substantially_english_ad_can_pass_without_analytical_task_phrase():
@@ -320,24 +320,80 @@ def test_marketing_events_without_research_or_analytics_is_dropped():
     assert result.drop_stage == "marketing_talking_gate"
 
 
-def test_english_sap_consulting_is_eligible_but_strong_german_consulting_drops():
+def test_relevant_consulting_with_strong_german_routes_to_de_required():
     english = score_text(
-        "SAP Consultant Customer Service",
-        "You will work with our team on SAP consulting projects and process transformation. "
+        "Analytics Consultant Customer Service",
+        "You will work with our team on analytics consulting projects and process transformation. "
         "English is the working language and German is not required.",
         KEYWORDS,
         employment_type="Vollzeit",
     )
     german = score_text(
-        "SAP Consultant Customer Service",
-        "SAP consulting and process transformation. Sehr gute Deutschkenntnisse erforderlich.",
+        "Analytics Consultant Customer Service",
+        "Analytics consulting and process transformation. Sehr gute Deutschkenntnisse erforderlich.",
         KEYWORDS,
         employment_type="Vollzeit",
     )
     assert english.band != "DROP"
     assert english.primary_cv_family.startswith("B08")
-    assert german.drop_stage == "language_gate"
-    assert german.reason == "german_c1_c2_or_native_required_for_consulting"
+    assert german.band == "DE REQUIRED"
+    assert german.drop_stage == ""
+    assert german.reason == "german_c1_c2_or_native_required"
+
+
+@pytest.mark.parametrize(
+    ("title", "expected_band", "expected_stage"),
+    [
+        ("Professor für Digital Business", "ACADEMISCHE", ""),
+        ("Wissenschaftlicher Mitarbeiter Data Analytics", "ACADEMISCHE", ""),
+        ("Wissenschaftliche/r Mitarbeiter/in Market Research", "ACADEMISCHE", ""),
+        ("Akademische*r Mitarbeiter*in Data Analytics", "ACADEMISCHE", ""),
+        ("Wissenschaftliche*r Mitarbeiter*in Fertigungstechnik", "ACADEMISCHE", ""),
+        ("Researcher in computational superconductivity", "ACADEMISCHE", ""),
+        ("Senior Business Intelligence Analyst", "DROP", "seniority_gate"),
+        ("Head of Market Intelligence", "DROP", "seniority_gate"),
+        ("Research Group Leader Data Science", "DROP", "seniority_gate"),
+        ("Software Engineer Data Platform", "DROP", "pure_it_title_gate"),
+        ("IT Support / Systemadministrator", "DROP", "pure_it_title_gate"),
+        ("SAP ABAP Entwickler", "DROP", "pure_it_title_gate"),
+        ("SAP FI/CO Consultant", "DROP", "pure_it_title_gate"),
+        ("SAP GTS Consultant", "DROP", "pure_it_title_gate"),
+        ("Junior ERP-Consultant", "DROP", "pure_it_title_gate"),
+        ("IT-Berater:in", "DROP", "pure_it_title_gate"),
+        ("Technischer Berater M365", "DROP", "pure_it_title_gate"),
+        ("Business Process Automation Consultant", "DROP", "pure_it_title_gate"),
+    ],
+)
+def test_deterministic_title_gates_cannot_be_rescued_by_body(title, expected_band, expected_stage):
+    result = score_text(
+        title,
+        "Business intelligence, strategy, market research, KPI analysis and Power BI dashboards.",
+        KEYWORDS,
+        employment_type="Vollzeit",
+    )
+    assert result.band == expected_band
+    assert result.drop_stage == expected_stage
+
+
+def test_high_score_without_target_title_evidence_stays_in_review():
+    result = score_text(
+        "Werkstudent Spezialrolle",
+        "Data analytics, business intelligence, market research, strategy, forecasting, KPI reporting and Power BI.",
+        KEYWORDS,
+    )
+    assert result.score >= 12
+    assert result.band == "REVIEW"
+    assert result.reason == "priority_requires_target_title_evidence"
+
+
+def test_target_title_with_high_german_is_de_required_after_fit_scoring():
+    result = score_text(
+        "Werkstudent Business Intelligence",
+        "KPI analysis and Power BI. Verhandlungssicheres Deutsch ist erforderlich.",
+        KEYWORDS,
+    )
+    assert result.band == "DE REQUIRED"
+    assert result.drop_stage == ""
 
 
 @pytest.mark.parametrize(
@@ -354,7 +410,8 @@ def test_english_sap_consulting_is_eligible_but_strong_german_consulting_drops()
 )
 def test_obvious_non_target_titles_drop_without_analytical_rescue(title):
     result = score_text(title, "Allgemeine operative Aufgaben und Teamarbeit.", KEYWORDS, employment_type="Vollzeit")
-    assert result.drop_stage == "wrong_profession"
+    expected = "pure_it_title_gate" if title.startswith("IT Support") else "wrong_profession"
+    assert result.drop_stage == expected
 
 
 def test_title_exclusion_is_rescued_by_strong_analytics_body():
